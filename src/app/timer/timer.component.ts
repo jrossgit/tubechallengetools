@@ -1,7 +1,11 @@
 import {Component} from '@angular/core';
 
+import {Timer} from './timer.timer';
+import {TimerService} from './timer.service';
+
 @Component({
   selector: 'timer',
+  providers: [TimerService],
   styles: [`
     .timer {
       position: relative;
@@ -36,11 +40,11 @@ import {Component} from '@angular/core';
         <input type="text" class="timer__input" [value]="timerValue">
       </div>
       <div class="timer__controls">
-        <button (click)="takeSplitValue();" class="timer__increment">
-          Split
+        <button (click)="startTimer();" class="timer__increment">
+          Start
         </button>
-        <button (click)="increment();" class="timer__split">
-          Increment
+        <button (click)="splitTimer();" class="timer__split">
+          Split
         </button>
       </div>
         <table>
@@ -54,15 +58,28 @@ import {Component} from '@angular/core';
   `
 })
 export class TimerComponent {
-  public timerValue:number = 0;
-  splitValues = [0, 0, 0];
-  
+  timer: Timer;
+  splitValues = [0];
+
+  constructor(timerService: TimerService) {
+    this.timer = timerService.getTimer();
+  }
+
   //Button controls
-  increment() {
-    this.timerValue++;
+  startTimer() {
+    this.timer.start();
   }
-  takeSplitValue() {
-    this.splitValues.push(this.timerValue);
+  splitTimer() {
+    this.splitValues.push(this.timer.split());
   }
-  
+
+
+  //Button controls
+  // increment() {
+  //   this.timerValue++;
+  // }
+  // takeSplitValue() {
+  //   this.splitValues.push(this.timerValue);
+  // }
+
 }
